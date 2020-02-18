@@ -23,7 +23,7 @@ public class Gasto: TransaccionGasto {
         
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.handler?(true, Date())
-            print("Gasto confirmado.", Date())
+            print("\(descripcion): Gasto confirmado.", Date())
         }
     }
 }

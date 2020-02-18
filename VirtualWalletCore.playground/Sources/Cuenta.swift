@@ -3,10 +3,10 @@ import Foundation
 public class Cuenta {
     public var cuenta: Float = 0 {
         willSet {
-            print("Vamos a cambiar el valor", cuenta, newValue)
+            //print("Vamos a cambiar el valor", cuenta, newValue)
         }
         didSet {
-            print("Tenemos nuevo valor", cuenta)
+            //print("Tenemos nuevo valor", cuenta)
         }
     }
     public var descripcion: String = ""
@@ -21,14 +21,14 @@ public class Cuenta {
     }
     
     @discardableResult
-    public func agregarTransaccion(transaccion: TipoTransaccion) throws -> Transaccion? {
+    public func agregarTransaccion(_ transaccion: TipoTransaccion) throws -> Transaccion? {
         switch transaccion {
             case .gasto(let cantidad, let descripcion, let categoria, let fecha):
                 if cuenta < cantidad {
                     throw CuentaException.cantidadExcedida
                 }
                 
-                let total = transaccionesDe(categoria: categoria).reduce(0.0, {
+                let total = obtenerGastosDe(categoria).reduce(0.0, {
                     $0 + $1.cantidad
                 })
                 
@@ -60,8 +60,8 @@ public class Cuenta {
         }
     }
     
-    public func transaccionesDe(categoria: CategoriaGasto) -> [Transaccion]{
-        return transacciones.filter({ (transaccion) -> Bool in
+    public func obtenerGastosDe(_ categoria: CategoriaGasto) -> [Transaccion]{
+        return self.transacciones.filter({ (transaccion) -> Bool in
             guard let transaccion = transaccion as? Gasto else {
                 return false
             }
@@ -70,15 +70,31 @@ public class Cuenta {
         })
     }
     
-    public func agregar(presupuesto: Presupuesto){
+    public func agregarPresupuesto(_ presupuesto: Presupuesto){
         self.presupuestos[presupuesto.categoria] = presupuesto
     }
     
-    public func presupuestoDe(categoria: CategoriaGasto) -> Float {
+    public func obtenerPresupuestoDe(categoria: CategoriaGasto) -> Float {
         return self.presupuestos[categoria]?.cantidad ?? 0;
     }
     
-    public func tiempoDeVida() -> Int{
+    public func obtenerPresupuestoTotal() -> Float {
+        var total: Float = 0
+        for key in self.presupuestos.keys {
+            total += presupuestos[key]!.cantidad
+        }
+        return total
+    }
+    
+    public func obtenerGastoTotal() -> Float{
+        var total: Float = 0
+        for gasto in self.gastos {
+            total += gasto.cantidad
+        }
+        return total
+    }
+    
+    public func obtenerTiempoDeVida() -> Int{
         var total: Float = 0
         
         for key in presupuestos.keys {

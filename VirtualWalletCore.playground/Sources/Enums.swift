@@ -7,9 +7,9 @@ public enum CuentaException: Error {
 }
 
 public enum CategoriaGasto: Int {
-    case salud
+    case estudio, ahorro, extra
     case alimento, renta, transporte, alimentoSnow
-    case entretenimiento
+    case entretenimiento, serviciosBasicos, celular
 }
 
 public enum TipoTransaccion {

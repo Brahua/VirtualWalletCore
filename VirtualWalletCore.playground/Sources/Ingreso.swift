@@ -17,7 +17,7 @@ public class Ingreso: Transaccion {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.handler?(true, Date())
-            print("Ingreso confirmado.", Date())
+            print("\(descripcion): Ingreso confirmado.", Date())
         }
     }
 }
